@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词趣味消消乐</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e6d4b2, #d4b57d);
+            padding: 20px;
+        }
+        
+        .container {
+            background: linear-gradient(145deg, #f3e9d6, #e1ceaa);
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(139, 69, 19, 0.4);
+            width: 95%;
+            max-width: 900px;
+            padding: 30px;
+            border: 10px solid #8b5a2b;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(139, 90, 43, 0.2);
+            border-radius: 25px 25px 0 0;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #5d3805;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 150px;
+            height: 5px;
+            background: linear-gradient(to right, #8b5a2b, #c19a66, #8b5a2b);
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        
+        /* 登录区域样式 */
+        .login-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 253, 245, 0.7);
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 3px solid #c19a66;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+        }
+        
+        .input-group label {
+            font-size: 1.2rem;
+            color: #5d3805;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        #player-name {
+            padding: 12px 15px;
+            border: 2px solid #8b5a2b;
+            border-radius: 12px;
+            background: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #player-name:focus {
+            border-color: #d4a555;
+            box-shadow: 0 0 8px rgba(212, 165, 85, 0.6);
+        }
+        
+        /* 难度选择区域 */
+        .difficulty-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 15px 25px;
+            background: linear-gradient(to bottom, #8b5a2b, #6b3f15);
+            color: #f3e9d6;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 120px;
+        }
+        
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+        }
+        
+        .difficulty-btn.active {
+            background: linear-gradient(to bottom, #c19a66, #8b5a2b);
+            box-shadow: inset 0 0 10px rgba(107, 63, 21, 0.6);
+            transform: translateY(2px);
+        }
+        
+        /* 游戏区域样式 */
+        .game-section {
+            display: none;
+            padding: 20px;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: rgba(139, 90, 43, 0.15);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .timer-display {
+            font-size: 1.4rem;
+            color: #6b3f15;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px 20px;
+            border-radius: 10px;
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        
+        .card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-height: 70px;
+            min-width: 110px;
+            box-shadow: 0 5px 10px rgba(107, 63, 21, 0.3);
+            background: linear-gradient(145deg, #fffbf0, #f5e9d0);
+            text-align: center;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .english-card {
+            font-size: 22pt;
+            color: #5d3805;
+            border: 3px solid #c19a66;
+        }
+        
+        .chinese-card {
+            font-size: 20pt;
+            color: #8b5a2b;
+            border: 3px dashed #b88a4d;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+        }
+        
+        .card.selected {
+            transform: scale(1.08);
+            box-shadow: 0 0 20px #d4a555;
+            background: linear-gradient(145deg, #fff7e1, #f9e5c0);
+        }
+        
+        .card.matched {
+            animation: bubble-pop 0.6s forwards;
+        }
+        
+        @keyframes bubble-pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); background: #d4a555; opacity: 0.9; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        /* 结果和排行榜区域 */
+        .result-section {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 253, 245, 0.7);
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            color: #8b5a2b;
+            margin-bottom: 15px;
+        }
+        
+        .player-info {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            color: #5d3805;
+        }
+        
+        .restart-btn {
+            padding: 12px 35px;
+            background: linear-gradient(to bottom, #c19a66, #8b5a2b);
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* 排行榜样式 */
+        .leaderboard-section {
+            display: block;
+            margin-top: 40px;
+            background: rgba(255, 253, 245, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid #c19a66;
+        }
+        
+        .leaderboard-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #5d3805;
+            margin-bottom: 20px;
+        }
+        
+        #leaderboard-list {
+            list-style-type: none;
+            counter-reset: leaderboard-counter;
+            padding: 0;
+        }
+        
+        #leaderboard-list li {
+            counter-increment: leaderboard-counter;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: rgba(193, 154, 102, 0.3);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        #leaderboard-list li:nth-child(-n+3) {
+            background: linear-gradient(to right, rgba(193, 154, 102, 0.3), rgba(212, 165, 85, 0.4));
+            font-weight: bold;
+        }
+        
+        #leaderboard-list li::before {
+            content: counter(leaderboard-counter);
+            margin-right: 10px;
+            font-weight: bold;
+            color: #8b5a2b;
+        }
+        
+        .current-player {
+            background: rgba(212, 165, 85, 0.5) !important;
+            box-shadow: 0 0 8px rgba(212, 165, 85, 0.7);
+        }
+        
+        .instructions {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(255, 253, 245, 0.7);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            color: #5d3805;
+            border: 2px dashed #b88a4d;
+        }
+        
+        .how-to-play {
+            text-align: left;
+            padding: 15px 25px;
+            margin: 20px 0;
+            background: rgba(255, 253, 245, 0.7);
+            border-radius: 15px;
+            font-size: 1.05rem;
+            color: #5d3805;
+            border: 1px solid #b88a4d;
+        }
+        
+        .how-to-play h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #8b5a2b;
+        }
+        
+        .how-to-play ul {
+            padding-left: 20px;
+        }
+        
+        .how-to-play li {
+            margin: 8px 0;
+        }
+        
+        /* 装饰元素 */
+        .choco-chip {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #5d3805;
+            border-radius: 50%;
+            transform: rotate(15deg);
+        }
+        
+        .chip1 { top: 50px; left: 40px; }
+        .chip2 { top: 120px; right: 60px; width: 25px; height: 25px; }
+        .chip3 { bottom: 80px; left: 70px; }
+        .chip4 { bottom: 30px; right: 40px; width: 18px; height: 18px; }
+        
+        @media (max-width: 768px) {
+            .difficulty-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .difficulty-btn {
+                width: 90%;
+                max-width: 250px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .card {
+                min-width: 90px;
+                padding: 8px 10px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        .watermark {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: rgba(139, 90, 43, 0.6);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="choco-chip chip1"></div>
+        <div class="choco-chip chip2"></div>
+        <div class="choco-chip chip3"></div>
+        <div class="choco-chip chip4"></div>
+        <div class="watermark">大学英语课堂游戏</div>
+        
+        <h1>单词趣味消消乐</h1>
+        
+        <div class="instructions">
+            <p>✨ 点击对应的英文单词和中文释义即可消除卡片 ✨<br>
+                每关限时50秒，挑战最快时间！</p>
+        </div>
+        
+        <div class="how-to-play">
+            <h3>游戏说明</h3>
+            <ul>
+                <li><strong>游戏目标</strong>：匹配对应的英文单词和中文释义</li>
+                <li><strong>玩法</strong>：先点击一个英文单词，然后点击它的中文翻译</li>
+                <li><strong>匹配成功</strong>：两个卡片会像泡泡一样消失并播放成功音效</li>
+                <li><strong>匹配失败</strong>：卡片会抖动并播放错误音效</li>
+                <li><strong>时间限制</strong>：每关50秒，完成时间越短排名越高</li>
+                <li><strong>难度选择</strong>：容易(5词)、普通(10词)、高级(15词)</li>
+            </ul>
+        </div>
+        
+        <!-- 登录区域 -->
+        <div class="login-section">
+            <div class="input-group">
+                <label for="player-name">输入您的昵称：</label>
+                <input type="text" id="player-name" placeholder="请输入您的昵称">
+            </div>
+        </div>
+        
+        <!-- 难度选择区域 -->
+        <div class="difficulty-section">
+            <button class="difficulty-btn" data-difficulty="easy">容易 (5词)</button>
+            <button class="difficulty-btn" data-difficulty="medium">普通 (10词)</button>
+            <button class="difficulty-btn" data-difficulty="hard">高级 (15词)</button>
+        </div>
+        
+        <!-- 游戏区域 -->
+        <div class="game-section">
+            <div class="game-header">
+                <div class="player-display" id="player-display">玩家: 匿名</div>
+                <div class="timer-display">时间: <span id="timer">0</span>秒（限时50秒）</div>
+            </div>
+            <div class="cards-container" id="cards-container"></div>
+        </div>
+        
+        <!-- 游戏结果区域 -->
+        <div class="result-section" id="result-section">
+            <h2 class="result-title" id="result-title">游戏结束</h2>
+            <p class="player-info" id="result-info"></p>
+            <button class="restart-btn" id="restart-btn">再玩一次</button>
+        </div>
+        
+        <!-- 排行榜区域 -->
+        <div class="leaderboard-section">
+            <h3 class="leaderboard-title">🏆 排行榜 (前十名) 🏆</h3>
+            <ul id="leaderboard-list">
+                <li>还没有记录，快来创造纪录吧！</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 单词数据
+        const wordPairs = [
+            { en: "pose", cn: "造成，导致（困难或危险）" },
+            { en: "comprehensive", cn: "综合的；多方面的" },
+            { en: "inherit", cn: "沿袭，秉承；继承" },
+            { en: "transmit", cn: "传递；传送；传播" },
+            { en: "yield", cn: "产生；出产；屈服；让步" },
+            { en: "emerge", cn: "出现；为…所公认；露出" },
+            { en: "explore", cn: "探测；考察；探讨" },
+            { en: "confidence", cn: "信心；信赖；信任" },
+            { en: "resource", cn: "资源；自然资源" },
+            { en: "assume", cn: "假定；假设；认为" },
+            { en: "benefit", cn: "利益，好处" },
+            { en: "available", cn: "可获得的，可利用的" },
+            { en: "attain", cn: "(通过长时间努力)获得，得到" },
+            { en: "rewarding", cn: "值得的；有回报的" },
+            { en: "acquire", cn: "习得(知识,技能)，获得" }
+        ];
+        
+        // 游戏状态变量
+        let gameState = {
+            currentPlayer: "",
+            difficulty: "medium",
+            timerInterval: null,
+            timeElapsed: 0,
+            selectedCards: [],
+            matchesFound: 0,
+            gameStarted: false,
+            totalPairs: 0,
+            canClick: true // 防误触标志
+        };
+        
+        // DOM元素引用
+        const elements = {
+            playerNameInput: document.getElementById('player-name'),
+            difficultyButtons: document.querySelectorAll('.difficulty-btn'),
+            gameSection: document.querySelector('.game-section'),
+            cardsContainer: document.getElementById('cards-container'),
+            playerDisplay: document.getElementById('player-display'),
+            timerDisplay: document.getElementById('timer'),
+            resultSection: document.getElementById('result-section'),
+            resultTitle: document.getElementById('result-title'),
+            resultInfo: document.getElementById('result-info'),
+            restartButton: document.getElementById('restart-btn'),
+            leaderboardList: document.getElementById('leaderboard-list')
+        };
+        
+        // 创建虚拟音效元素
+        function createAudioElements() {
+            const audioContainer = document.createElement('div');
+            audioContainer.innerHTML = `
+                <audio id="click-sound"><source src="click.mp3" type="audio/mpeg"></audio>
+                <audio id="error-sound"><source src="error.mp3" type="audio/mpeg"></audio>
+                <audio id="success-sound"><source src="success.mp3" type="audio/mpeg"></audio>
+                <audio id="victory-sound"><source src="victory.mp3" type="audio/mpeg"></audio>
+            `;
+            document.body.appendChild(audioContainer);
+        }
+        
+        // 点击音效函数
+        function playSound(type) {
+            try {
+                const sound = document.getElementById(`${type}-sound`);
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log("Audio play failed:", e));
+                } else {
+                    console.log(`Sound ${type} not found`);
+                }
+            } catch(e) {
+                console.log("Sound error:", e);
+            }
+        }
+        
+        // 单词发音函数
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-GB'; // 英式发音
+                utterance.pitch = 1;
+                utterance.rate = 0.9;
+                
+                // 过滤掉单词中的点和逗号
+                const cleanWord = word.replace(/[.,]/g, '');
+                utterance.text = cleanWord;
+                
+                // 查找英式发音
+                const voices = window.speechSynthesis.getVoices();
+                const britishVoice = voices.find(voice => 
+                    voice.lang.includes('en-GB') || voice.name.includes('British')
+                );
+                
+                if (britishVoice) {
+                    utterance.voice = britishVoice;
+                }
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // 难度选择
+        elements.difficultyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // 设置活跃状态
+                elements.difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // 存储难度设置
+                gameState.difficulty = button.dataset.difficulty;
+                
+                // 开始游戏
+                setTimeout(startGame, 300);
+            });
+        });
+        
+        // 开始游戏
+        function startGame() {
+            // 获取玩家名字
+            gameState.currentPlayer = elements.playerNameInput.value.trim() || "匿名玩家";
+            
+            // 验证是否选择了难度
+            if (!document.querySelector('.difficulty-btn.active')) {
+                alert("请选择游戏难度！");
+                return;
+            }
+            
+            // 设置游戏状态
+            gameState.timeElapsed = 0;
+            gameState.selectedCards = [];
+            gameState.matchesFound = 0;
+            gameState.gameStarted = true;
+            gameState.canClick = true;
+            
+            // 设置游戏难度（不同数量的单词对）
+            switch(gameState.difficulty) {
+                case "easy":
+                    gameState.totalPairs = 5;
+                    break;
+                case "medium":
+                    gameState.totalPairs = 10;
+                    break;
+                case "hard":
+                    gameState.totalPairs = 15;
+                    break;
+            }
+            
+            // 显示玩家名称
+            elements.playerDisplay.textContent = `玩家: ${gameState.currentPlayer}`;
+            
+            // 显示游戏区域
+            document.querySelector('.login-section').style.display = 'none';
+            document.querySelector('.difficulty-section').style.display = 'none';
+            elements.gameSection.style.display = 'block';
+            elements.resultSection.style.display = 'none';
+            
+            // 生成卡片
+            generateGameCards();
+            
+            // 开始计时
+            startTimer();
+        }
+        
+        // 生成游戏卡片
+        function generateGameCards() {
+            // 清空容器
+            elements.cardsContainer.innerHTML = '';
+            
+            // 根据难度选择单词
+            const selectedWordPairs = getRandomWordPairs(gameState.totalPairs);
+            
+            // 创建卡片
+            const cards = [];
+            
+            // 生成英文卡片
+            selectedWordPairs.forEach(pair => {
+                const card = document.createElement('div');
+                card.className = 'card english-card';
+                card.textContent = pair.en;
+                card.dataset.word = pair.en;
+                card.dataset.type = 'en';
+                card.dataset.cn = pair.cn;
+                cards.push(card);
+            });
+            
+            // 生成中文卡片
+            selectedWordPairs.forEach(pair => {
+                const card = document.createElement('div');
+                card.className = 'card chinese-card';
+                card.textContent = pair.cn;
+                card.dataset.word = pair.en; // 使用英文单词作为匹配键
+                card.dataset.type = 'cn';
+                card.dataset.en = pair.en;
+                cards.push(card);
+            });
+            
+            // 洗牌算法
+            shuffleCards(cards);
+            
+            // 添加到容器
+            cards.forEach(card => {
+                card.addEventListener('click', handleCardClick);
+                elements.cardsContainer.appendChild(card);
+            });
+        }
+        
+        // 随机选择单词对
+        function getRandomWordPairs(count) {
+            const shuffled = [...wordPairs].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+        
+        // 洗牌算法（Fisher-Yates）
+        function shuffleCards(cards) {
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+        }
+        
+        // 处理卡片点击
+        function handleCardClick() {
+            // 如果游戏未开始或卡片已匹配，或正在处理点击，则返回
+            if (!gameState.gameStarted || this.classList.contains('matched') || 
+                gameState.selectedCards.length === 2 || !gameState.canClick) {
+                return;
+            }
+            
+            // 如果已经选择了这个卡片，则取消选择
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                gameState.selectedCards = gameState.selectedCards.filter(card => card !== this);
+                return;
+            }
+            
+            // 播放点击音效
+            playSound('click');
+            
+            // 单词发音（如果是英文卡片）
+            if (this.dataset.type === 'en') {
+                speakWord(this.textContent);
+            }
+            
+            // 高亮选中的卡片
+            this.classList.add('selected');
+            gameState.selectedCards.push(this);
+            
+            // 如果已选了两张卡片
+            if (gameState.selectedCards.length === 2) {
+                // 禁用点击防止误触
+                gameState.canClick = false;
+                
+                // 检查是否匹配
+                setTimeout(checkCardMatch, 500);
+            }
+        }
+        
+        // 检查卡片匹配
+        function checkCardMatch() {
+            const [card1, card2] = gameState.selectedCards;
+            
+            // 确保选中了一张英文和一张中文
+            if (card1.dataset.type === card2.dataset.type) {
+                playSound('error');
+                resetSelectedCards();
+                return;
+            }
+            
+            // 智能匹配检测 - 检查它们是否共享相同的dataset.word值
+            if (card1.dataset.word === card2.dataset.word) {
+                // 匹配成功
+                playSound('success');
+                
+                // 应用匹配动画
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                
+                setTimeout(() => {
+                    card1.style.visibility = 'hidden';
+                    card2.style.visibility = 'hidden';
+                }, 500);
+                
+                // 更新匹配计数
+                gameState.matchesFound++;
+                
+                // 检查是否获胜
+                if (gameState.matchesFound === gameState.totalPairs) {
+                    endGame(true);
+                }
+            } else {
+                // 匹配失败
+                playSound('error');
+                // 添加抖动效果
+                card1.classList.add('shake');
+                card2.classList.add('shake');
+                setTimeout(() => {
+                    card1.classList.remove('shake');
+                    card2.classList.remove('shake');
+                }, 500);
+            }
+            
+            // 重置选择并恢复点击
+            resetSelectedCards();
+            gameState.canClick = true;
+        }
+        
+        // 添加晃动动画
+        const style = document.createElement('style');
+        style.textContent = `
+            .shake {
+                animation: shake 0.5s;
+            }
+            
+            @keyframes shake {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 重置选中的卡片
+        function resetSelectedCards() {
+            gameState.selectedCards.forEach(card => {
+                card.classList.remove('selected');
+            });
+            gameState.selectedCards = [];
+        }
+        
+        // 开始计时
+        function startTimer() {
+            elements.timerDisplay.textContent = gameState.timeElapsed;
+            
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeElapsed++;
+                elements.timerDisplay.textContent = gameState.timeElapsed;
+                
+                // 检查是否超时（50秒限制）
+                if (gameState.timeElapsed >= 50) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+        
+        // 结束游戏
+        function endGame(isWin) {
+            clearInterval(gameState.timerInterval);
+            gameState.gameStarted = false;
+            
+            if (isWin) {
+                playSound('victory');
+                elements.resultTitle.textContent = "🎉 恭喜获胜！ 🎉";
+                elements.resultInfo.textContent = `${gameState.currentPlayer} 在${gameState.difficulty==='easy'?'容易':gameState.difficulty==='medium'?'普通':'高级'}难度下用时 ${gameState.timeElapsed} 秒完成了游戏！`;
+                
+                // 如果玩家成功完成，更新排行榜
+                updateLeaderboard();
+            } else {
+                elements.resultTitle.textContent = "⌛ 时间到了！ ⌛";
+                elements.resultInfo.textContent = `很遗憾，时间用完了！您成功匹配了 ${gameState.matchesFound}/${gameState.totalPairs} 组单词。`;
+            }
+            
+            // 显示结果区域
+            elements.resultSection.style.display = 'block';
+            
+            // 渲染排行榜
+            renderLeaderboard();
+        }
+        
+        // 更新排行榜
+        function updateLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('wordMatchLeaderboard')) || [];
+            
+            // 添加新分数
+            leaderboard.push({
+                player: gameState.currentPlayer,
+                time: gameState.timeElapsed,
+                difficulty: gameState.difficulty,
+                timestamp: new Date().toISOString()
+            });
+            
+            // 排序（时间最短在前）
+            leaderboard.sort((a, b) => a.time - b.time);
+            
+            // 只保留前10名
+            leaderboard = leaderboard.slice(0, 10);
+            
+            // 保存回localStorage
+            localStorage.setItem('wordMatchLeaderboard', JSON.stringify(leaderboard));
+        }
+        
+        // 渲染排行榜
+        function renderLeaderboard() {
+            const leaderboard = JSON.parse(localStorage.getItem('wordMatchLeaderboard')) || [];
+            elements.leaderboardList.innerHTML = '';
+            
+            if (leaderboard.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = "还没有记录，快来创造纪录吧！";
+                elements.leaderboardList.appendChild(li);
+                return;
+            }
+            
+            const currentPlayerEntry = {
+                player: gameState.currentPlayer,
+                time: gameState.timeElapsed,
+                timestamp: new Date().toISOString()
+            };
+            
+            leaderboard.forEach((entry, index) => {
+                const li = document.createElement('li');
+                
+                // 高亮当前玩家（仅当玩家成功完成游戏时）
+                if (entry.player === currentPlayerEntry.player && entry.time === currentPlayerEntry.time) {
+                    li.classList.add('current-player');
+                }
+                
+                const playerSpan = document.createElement('span');
+                playerSpan.textContent = entry.player;
+                
+                const timeSpan = document.createElement('span');
+                timeSpan.textContent = `${entry.time}秒 (${getDifficultyName(entry.difficulty)})`;
+                
+                li.appendChild(playerSpan);
+                li.appendChild(timeSpan);
+                elements.leaderboardList.appendChild(li);
+            });
+        }
+        
+        // 获取难度名称
+        function getDifficultyName(difficulty) {
+            switch(difficulty) {
+                case "easy": return "容易";
+                case "medium": return "普通";
+                case "hard": return "高级";
+                default: return "";
+            }
+        }
+        
+        // 重新开始游戏
+        elements.restartButton.addEventListener('click', () => {
+            // 显示难度选择
+            document.querySelector('.login-section').style.display = 'flex';
+            document.querySelector('.difficulty-section').style.display = 'flex';
+            elements.gameSection.style.display = 'none';
+            elements.resultSection.style.display = 'none';
+        });
+        
+        // 页面加载时创建音效元素并渲染排行榜
+        window.addEventListener('load', () => {
+            createAudioElements();
+            renderLeaderboard();
+        });
+    </script>
+</body>
+</html>
