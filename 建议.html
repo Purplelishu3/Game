@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced English Vocabulary PPT</title>
+    <style>
+        /* 整体风格 - 学术蓝 + 活力红 + 高级灰 */
+        :root {
+            --primary-blue: #2A5CAA;
+            --accent-red: #E63946;
+            --light-gray: #F8F9FA;
+            --dark-text: #2D3748;
+            --highlight-blue: #457B9D;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            color: var(--dark-text);
+        }
+        
+        .ppt-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        /* 顶部导航区 */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1a3f7a 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-icon {
+            font-size: 32px;
+            background: rgba(255,255,255,0.15);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 三栏卡片布局 */
+        .card-container {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .card {
+            padding: 25px;
+            position: relative;
+        }
+        
+        /* 左卡：词性标识 */
+        .card-left {
+            flex: 3;
+            background-color: var(--light-gray);
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .part-of-speech {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .word {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-right: 15px;
+        }
+        
+        .pos-tag {
+            background: var(--primary-blue);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .formality-tag {
+            background: #e2e8f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        /* 中卡：双义解析 */
+        .card-center {
+            flex: 4;
+            background-color: white;
+        }
+        
+        .meaning-card {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        
+        .meaning-card:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .meaning-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .meaning-number {
+            background: var(--accent-red);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+        
+        .meaning-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .meaning-definition {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-red);
+            margin-bottom: 15px;
+        }
+        
+        .example {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .example-sentence {
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        .translation {
+            color: #4a5568;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        
+        .highlight-word {
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+        
+        .visual-hint {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: white;
+            border: 2px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+        
+        /* 右卡：文化延伸 */
+        .card-right {
+            flex: 3;
+            background: linear-gradient(to bottom, #e6f2ff 0%, #d4e6ff 100%);
+            padding-top: 30px;
+        }
+        
+        .culture-section {
+            margin-bottom: 30px;
+        }
+        
+        .culture-title {
+            font-size: 22px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-red);
+        }
+        
+        .culture-card {
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            border: 1px solid rgba(42, 92, 170, 0.2);
+        }
+        
+        .culture-heading {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .culture-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .culture-name {
+            font-weight: 600;
+            font-size: 17px;
+        }
+        
+        .task-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(42, 92, 170, 0.1);
+            border: 1px solid rgba(42, 92, 170, 0.15);
+            text-align: center;
+        }
+        
+        .task-title {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .qrcode-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #a8d1ff 0%, #70b0ff 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        .task-description {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ppt-container">
+        <!-- 顶部导航区 -->
+        <div class="header">
+            <div class="section-title">Section A: Detailed study of the text</div>
+            <div class="section-icon">📖</div>
+        </div>
+        
+        <div class="card-container">
+            <!-- 左卡：词性标识 -->
+            <div class="card card-left">
+                <div class="part-of-speech">
+                    <div class="word">await</div>
+                    <div class="pos-tag">vt.</div>
+                    <div class="formality-tag">(fml.)</div>
+                </div>
+                
+                <div class="grammar-section">
+                    <h3>Grammatical Features</h3>
+                    <ul>
+                        <li>Transitive verb (requires direct object)</li>
+                        <li>Commonly used in written English</li>
+                        <li>More formal than "wait for"</li>
+                    </ul>
+                </div>
+                
+                <div class="collocation-section">
+                    <h3>Common Collocations</h3>
+                    <ul>
+                        <li><span class="highlight-word">eagerly</span> await</li>
+                        <li><span class="highlight-word">anxiously</span> await</li>
+                        <li>await <span class="highlight-word">arrival/response/results</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 中卡：双义解析 -->
+            <div class="card card-center">
+                <!-- 语义1 -->
+                <div class="meaning-card">
+                    <div class="meaning-header">
+                        <div class="meaning-number">1</div>
+                        <div class="meaning-title">"wait for" meaning</div>
+                    </div>
+                    
+                    <div class="meaning-definition">
+                        to wait for something to happen or for someone to arrive
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-sentence">
+                            "The little boy was still <span class="highlight-word">awaiting</span> his father's return when the clock struck 11."
+                        </div>
+                        <div class="translation">
+                            当时钟敲响11点时，那个小男孩仍在等着他爸爸回来。
+                        </div>
+                    </div>
+                    
+                    <div class="grammar-note">
+                        <strong>Structure:</strong> await + <span class="highlight-word">noun/event</span> (direct object)
+                    </div>
+                    
+                    <div class="visual-hint">🔍 Usage Tip</div>
+                </div>
+                
+                <!-- 语义2 -->
+                <div class="meaning-card">
+                    <div class="meaning-header">
+                        <div class="meaning-number">2</div>
+                        <div class="meaning-title">"in the future" meaning</div>
+                    </div>
+                    
+                    <div class="meaning-definition">
+                        if something awaits you, it will happen to you in the future
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-sentence">
+                            "The biggest surprise <span class="highlight-word">awaiting</span> the girl is that her father is flying home for her birthday."
+                        </div>
+                        <div class="translation">
+                            那个女孩即将等到的最大惊喜是她爸爸将飞回家来为她庆祝生日。
+                        </div>
+                    </div>
+                    
+                    <div class="grammar-note">
+                        <strong>Note:</strong> Often used in contexts of <span class="highlight-word">future events</span> or <span class="highlight-word">destiny</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右卡：文化延伸 -->
+            <div class="card card-right">
+                <div class="culture-section">
+                    <div class="culture-title">Cultural Context</div>
+                    
+                    <div class="culture-card">
+                        <div class="culture-heading">
+                            <div class="culture-icon">中</div>
+                            <div class="culture-name">Chinese Cultural Perspective</div>
+                        </div>
+                        <p>In Chinese culture, "await" carries emotional weight of <span class="highlight-word">familial anticipation</span> and <span class="highlight-word">generational duty</span>. The father's return represents fulfillment of Confucian family values.</p>
+                    </div>
+                    
+                    <div class="culture-card">
+                        <div class="culture-heading">
+                            <div class="culture-icon">W</div>
+                            <div class="culture-name">Western Perspective</div>
+                        </div>
+                        <p>Western usage often emphasizes the <span class="highlight-word">individual experience</span> of anticipation. "Await" appears more in formal contexts like invitations or official communications.</p>
+                    </div>
+                </div>
+                
+                <div class="task-card">
+                    <div class="task-title">Advanced Exploration</div>
+                    <div class="qrcode-placeholder">⎙</div>
+                    <div class="task-description">
+                        Scan for deeper analysis: "Parental reunion in Chinese vs. Western literature"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
